@@ -19,6 +19,16 @@ fit_time_data <- function(data){
     m
 }
 
+fit_time_nb <- function(data){
+    data$Weekday = weekdays(data$Date)
+    data$Yearday = as.POSIXlt(data$Date)$yday
+    m = MASS::glm.nb(Total ~ Weekday +
+        sin(2*pi*Yearday/365) + cos(2*pi*Yearday/365) +
+        sin(4*pi*Yearday/365) + cos(4*pi*Yearday/365)
+         , data=data)
+    m
+}
+
 predict_time_data <- function(data,m){
     data$Weekday = weekdays(data$Date)
     data$Yearday = as.POSIXlt(data$Date)$yday
