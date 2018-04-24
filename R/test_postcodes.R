@@ -8,7 +8,7 @@ read_postcodes_file <- function(pc_csv){
 }
 
 get_postcodes_db <- function(sqlite, table, column){
-    con <- dbConnect(RSQLite::SQLite(), sqlite)
+    con <- dbConnect(RSQLite::SQLite(), sqlite, flags=SQLITE_RW)
     qs = paste0("select ",column," from ",table)
     res = dbSendQuery(con, qs)
     dbFetch(res)
