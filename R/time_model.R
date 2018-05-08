@@ -1,5 +1,8 @@
 read_time_data <- function(datafile){
     data = read.csv(datafile, stringsAsFactors=FALSE)
+    if(nrow(data)!=3){
+        stop("Expecting 3 columns, Total, Year, Data, in the data file")
+    }
     names(data)=c("Total","Year","Date")
     data$Date = as.Date(data$Date, format="%d/%m/%Y")
     data
