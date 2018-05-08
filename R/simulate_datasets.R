@@ -10,6 +10,7 @@
 sim_data <- function(time_model, postcode_pop, timespan=range(time_model$data$Date)){
 
     times = data.frame(Date = seq(timespan[1],timespan[2],1))
+    times = augment_data(times)
     times$Total = predict_time_data(times, time_model)
 
     full = data.frame(Date=rep(times$Date, times$Total))
