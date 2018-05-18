@@ -1,5 +1,6 @@
 
 fit_week_data <- function(data){
+    warning("week 53 data misinterpreted")
     data$week = week(data$Date)
     data$YW = data$Year + (data$week %% 52)/52
     wdata = aggregate(Total~YW, data=data, sum)
