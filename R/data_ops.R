@@ -65,14 +65,36 @@ data_week <- function(d, start=week_zero_start()){
     as.numeric((d-start)) %/% 7
 }
 
+data_week_monday <- function(w, start=week_zero_start()){
+    start + w*7
+}
+
 last_n_weeks_range <- function(d,n=10){
     d = as.Date(d)
     drange = seq(full_week_start(d),full_week_end(d),"day")
     w = data_week(d)
-    wr = c(max(w)-n-1, max(w))
+    wr = c(max(w)-n+1, max(w))
     wr
 }
 
-st_aggregate_weekly <- function(spatial, days, data){
+st_aggregate_weekly <- function(
+    spatial, spatial_id, # a spatial database and an ID column in that database
+    weeks=10,
+    data, s_c, date_c # the data, with a spatial column and a date column
+    ){
+
+    data$dweek = data_week(data[[date_c]])
+    drange = seq(full_week_start(data[[date_c]]),full_week_end(data[[date_c]]),"day")
+    wr = last_n_weeks_range(drange, n=weeks)
+    inweek = data$dweek >= wr[1] & data$dweek <= wr[2]
+    data = data[inweek,]
     
+    stgrid = expand.grid(s = spatial[[spatial_id]], t = seq(min(wr),max(wr)))
+
+    tab = as.data.frame(table(s=data[[s_c]],t=data$dweek))
+    tab$t = as.numeric(as.character(tab$t))
+    stj = left_join(stgrid, tab, c("s"="s","t"="t"))
+    stj$Freq[is.na(stj$Freq)]=0
+
+    stj
 }
