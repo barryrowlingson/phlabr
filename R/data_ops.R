@@ -65,6 +65,18 @@ data_week <- function(d, start=week_zero_start()){
     as.numeric((d-start)) %/% 7
 }
 
+
+week_data <- function(weeknum, start=week_zero_start()){
+    d1 = start + weeknum*7
+    d2 = d1 + 6
+    data.frame(first=d1, last=d2)
+}
+
+week_data_str <- function(weeknum, start=week_zero_start(), f="%d %b %y", fs = "%s - %s"){
+    dd = week_data(weeknum, start=start)
+    sprintf(fs, format(dd[,1],f),format(dd[,2],f))
+}
+
 data_week_monday <- function(w, start=week_zero_start()){
     start + w*7
 }
