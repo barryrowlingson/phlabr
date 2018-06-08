@@ -77,6 +77,11 @@ week_data_str <- function(weeknum, start=week_zero_start(), f="%d %b %y", fs = "
     sprintf(fs, format(dd[,1],f),format(dd[,2],f))
 }
 
+week_data_fac <- function(weeknum, start=week_zero_start(), f="%d %b %y", fs = "%s - %s"){
+    ww = week_data_str(weeknum, start=start, f=f, fs=fs)
+    factor(ww,levels=unique(ww[order(weeknum)]))
+}
+
 data_week_monday <- function(w, start=week_zero_start()){
     start + w*7
 }
